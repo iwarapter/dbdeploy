@@ -1,6 +1,7 @@
 package com.dbdeploy;
 
 import com.dbdeploy.exceptions.DbDeployException;
+import com.dbdeploy.exceptions.UsageException;
 import com.dbdeploy.scripts.ChangeScript;
 
 import java.io.IOException;
@@ -60,6 +61,9 @@ public class Controller {
 				break;
 
 			if (!applied.contains(script.getId())) {
+				if(!applied.isEmpty() && applied.get(applied.size() - 1) > script.getId()){
+					UsageException.throwForSequentialOrdering(script.getId() + " is not less than " + applied.get(applied.size() - 1) + " changes must be applied in order.");
+				}
 				result.add(script);
 			}
 		}

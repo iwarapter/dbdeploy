@@ -14,4 +14,7 @@ public class UsageException extends DbDeployException {
 		throw new UsageException(valueName + " required");
 	}
 
+	public static void throwForSequentialOrdering(String message) throws UsageException {
+		throw new UsageException(message);
+	}
 }

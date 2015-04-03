@@ -1,5 +1,6 @@
 package com.dbdeploy;
 
+import com.dbdeploy.exceptions.UsageException;
 import com.dbdeploy.scripts.ChangeScript;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -96,7 +97,17 @@ public class ControllerTest {
 		assertThat(applier.changeScripts.get(1), is(change2));
 	}
 
+	@Test(expected=UsageException.class)
+	public void shouldNotApplyChangesWithIdLowerThanLastApplied() throws Exception {
 
+		ChangeScript change4 = new ChangeScript(4);
+
+		when(availableChangeScriptsProvider.getAvailableChangeScripts())
+				.thenReturn(Arrays.asList(change1, change2, change3, change4));
+		when(appliedChangesProvider.getAppliedChanges()).thenReturn(Arrays.asList(1L, 3L));
+
+		controller.processChangeScripts(Long.MAX_VALUE);
+	}
 
     private class StubChangeScriptApplier implements ChangeScriptApplier {
         private List<ChangeScript> changeScripts;
