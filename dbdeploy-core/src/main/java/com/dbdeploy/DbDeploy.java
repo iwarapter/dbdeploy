@@ -11,11 +11,15 @@ import com.dbdeploy.database.changelog.QueryExecuter;
 import com.dbdeploy.exceptions.UsageException;
 import com.dbdeploy.scripts.ChangeScriptRepository;
 import com.dbdeploy.scripts.DirectoryScanner;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.PrintWriter;
 
 public class DbDeploy {
+
+	final static Logger logger = Logger.getLogger(DbDeploy.class);
+
 	private String url;
 	private String userid;
 	private String password;
@@ -81,7 +85,7 @@ public class DbDeploy {
 	}
 
 	public void go() throws Exception {
-		System.err.println(getWelcomeString());
+		logger.info(getWelcomeString());
 
 		validate();
 
