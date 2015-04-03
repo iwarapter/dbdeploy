@@ -1,6 +1,8 @@
 package com.dbdeploy.scripts;
 
 import com.dbdeploy.exceptions.UsageException;
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -17,6 +19,9 @@ import java.util.Date;
  * @author jbogan
  */
 public class ChangeScriptCreator {
+
+    final static Logger logger = Logger.getLogger(ChangeScriptCreator.class);
+
     private String changeScriptSuffix = ".sql";
     private String changeScriptTimestampFormat = "yyyyMMddHHmmss";
     private String scriptDescription;
@@ -82,10 +87,10 @@ public class ChangeScriptCreator {
             parseArguments(args, creator);
             creator.go();
         } catch (UsageException ex) {
-            System.err.println("ERROR: " + ex.getMessage());
-            System.err.println("Usage: java " + creator.getClass().getName() + " scriptDirectory [scriptName]");
+            logger.error("ERROR: " + ex.getMessage());
+            logger.error("Usage: java " + creator.getClass().getName() + " scriptDirectory [scriptName]");
         } catch (Exception ex) {
-            System.err.println("Failed to create script: " + ex);
+            logger.error("Failed to create script: " + ex);
             ex.printStackTrace();
             System.exit(2);
         }

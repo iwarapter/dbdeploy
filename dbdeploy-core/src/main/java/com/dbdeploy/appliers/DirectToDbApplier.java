@@ -6,11 +6,15 @@ import com.dbdeploy.database.changelog.DatabaseSchemaVersionManager;
 import com.dbdeploy.database.changelog.QueryExecuter;
 import com.dbdeploy.exceptions.ChangeScriptFailedException;
 import com.dbdeploy.scripts.ChangeScript;
+import org.apache.log4j.Logger;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class DirectToDbApplier implements ChangeScriptApplier {
+
+	final static Logger logger = Logger.getLogger(DirectToDbApplier.class);
+
 	private final QueryExecuter queryExecuter;
 	private final DatabaseSchemaVersionManager schemaVersionManager;
     private final QueryStatementSplitter splitter;
@@ -25,7 +29,7 @@ public class DirectToDbApplier implements ChangeScriptApplier {
         begin();
 
         for (ChangeScript script : changeScript) {
-            System.err.println("Applying " + script + "...");
+			logger.info("Applying " + script + "...");
 
             applyChangeScript(script);
             insertToSchemaVersionTable(script);
@@ -49,7 +53,7 @@ public class DirectToDbApplier implements ChangeScriptApplier {
 			String statement = statements.get(i);
 			try {
 				if (statements.size() > 1) {
-					System.err.println(" -> statement " + (i+1) + " of " + statements.size() + "...");
+					logger.info(" -> statement " + (i + 1) + " of " + statements.size() + "...");
 				}
 				queryExecuter.execute(statement);
 			} catch (SQLException e) {
